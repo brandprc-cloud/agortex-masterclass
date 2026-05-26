@@ -188,7 +188,7 @@
     /* ===== ABOUT ===== */
     .about-name {
       font-size: clamp(38px,6vw,72px); font-weight: 800;
-      font-style: italic; letter-spacing: -.03em;
+      letter-spacing: -.03em;
       line-height: 1; color: var(--od); margin-bottom: 6px;
     }
     .about-name .dot { color: var(--gold); }
@@ -345,9 +345,6 @@
       font-size: 12px; letter-spacing: .06em; color: var(--od-35);
     }
 
-    /* Divider */
-    .div { text-align: center; padding: 6px 0; font-size: 12px; letter-spacing: .18em; color: var(--od-35); background: var(--navy); }
-    .div.lt { background: var(--cream); color: rgba(44,44,44,.25); }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 980px) {
@@ -380,7 +377,7 @@
       .t-cell { border-right: 0; border-bottom: 1px solid rgba(201,164,58,.12); }
       .t-cell:last-child { border-bottom: 0; }
       .ft-grid { grid-template-columns: 1fr; gap: 28px; }
-      .fmt-row { flex-direction: column; }
+      .fmt-row { flex-direction: column; display: flex; width: 100%; }
       .fmt-cell { border-right: 0; border-bottom: 1px solid rgba(245,239,224,.08); }
       .fmt-cell:last-child { border-bottom: 0; }
     }
@@ -477,13 +474,11 @@
   </div>
 </section>
 
-<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
-
 <!-- ===== ABOUT ===== -->
 <section class="sec dark" id="about">
   <div class="sec-in">
     <div class="kicker">Кто ведёт</div>
-    <h2 class="about-name"><em>Андрей Брезгин<span class="dot">.</span></em></h2>
+    <h2 class="about-name">Андрей Брезгин<span class="dot">.</span></h2>
     <p class="about-role">Основатель · Agortex</p>
 
     <div class="about-socials">
@@ -532,8 +527,6 @@
   </div>
 </section>
 
-<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
-
 <!-- ===== AUDIENCE ===== -->
 <section class="sec light" id="audience">
   <div class="sec-in">
@@ -577,8 +570,6 @@
     </div>
   </div>
 </section>
-
-<div class="div lt">↓ &nbsp; scroll &nbsp; ↓</div>
 
 <!-- ===== RESULTS ===== -->
 <section class="sec light" id="results">
@@ -648,8 +639,6 @@
     <p class="res-foot">AI-подписка за $200/мес заменяет 3–5 человек на рутине · экономия от $3 000/мес чистой прибыли</p>
   </div>
 </section>
-
-<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
 
 <!-- ===== PROGRAM ===== -->
 <section class="sec dark" id="program">
