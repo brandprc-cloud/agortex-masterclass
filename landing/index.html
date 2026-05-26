@@ -118,9 +118,10 @@
       color: var(--gold); margin-bottom: 28px;
     }
     .hero-title {
-      font-size: clamp(68px, 9.5vw, 132px); font-weight: 900;
+      font-size: clamp(42px, 9.5vw, 132px); font-weight: 900;
       letter-spacing: -.05em; line-height: .9;
       color: var(--od); margin-bottom: 28px;
+      overflow-wrap: break-word; word-break: break-word;
     }
     .hero-title .dot { color: var(--gold); }
     .hero-sub {
@@ -382,10 +383,16 @@
       .fmt-cell:last-child { border-bottom: 0; }
     }
     @media (max-width: 420px) {
-      .hero-title { font-size: clamp(52px,14vw,80px); }
+      .hero-title { font-size: clamp(36px, 10vw, 56px); letter-spacing: -.03em; }
       .stats-row { grid-template-columns: 1fr 1fr; }
-      .nav-inner { padding: 0 16px; }
-      .btn-sm { font-size: 13px; padding: 9px 16px; }
+      .nav-inner { padding: 0 14px; }
+      .btn-sm { font-size: 13px; padding: 9px 14px; }
+      .sec-title { font-size: clamp(26px, 7vw, 36px); }
+      .about-name { font-size: clamp(30px, 8vw, 44px); }
+      .roi-num { font-size: clamp(24px, 7vw, 36px); }
+      .hero-sub { font-size: 15px; }
+      .sec { padding: 52px 14px; }
+      .hero { padding: 76px 14px 56px; }
     }
   </style>
 </head>
@@ -409,7 +416,7 @@
 <!-- ===== HERO ===== -->
 <section class="hero dark" id="hero">
   <div class="hero-in">
-    <div class="hero-kicker">Воркшоп по AI для бизнеса · Андрей Брезгин · Agortex</div>
+    <div class="hero-kicker">Воркшоп по AI для бизнеса · Андрей Брезгин</div>
 
     <h1 class="hero-title">
       Автоматизируй<br>бизнес<span class="dot">.</span>
@@ -495,7 +502,7 @@
         <img src="photo.jpg" alt="Андрей Брезгин, основатель Agortex, воркшоп по AI для бизнеса">
       </div>
       <div class="text-col">
-        <p class="about-accent">Я не преподаю AI. Я на нём работаю.</p>
+        <p class="about-accent">Всё что в воркшопе — я делаю в своём бизнесе каждый день.</p>
         <p class="about-body">
           12 лет в маркетинге и управлении продажами. Развивал коммерческие системы
           для <b>крупного регионального бизнеса</b> и премиальных брендов. Знаю, где
@@ -531,7 +538,7 @@
 <section class="sec light" id="audience">
   <div class="sec-in">
     <div class="kicker">Для кого · Аудитория</div>
-    <h2 class="sec-title">Узнай себя.</h2>
+    <h2 class="sec-title">Для кого этот воркшоп.</h2>
     <div class="gold-bar"></div>
     <div class="aud-grid">
       <div class="aud-card">
