@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Agortex · Воркшоп по AI для бизнеса · Андрей Брезгин</title>
+  <meta name="description" content="Готовые AI-инструменты для бизнеса. Воркшоп Андрея Брезгина — 7 модулей, практика руками, доступ сразу после регистрации.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231A2847'/><text x='16' y='23' text-anchor='middle' font-family='Inter,sans-serif' font-weight='900' font-size='20' fill='%23C9A43A'>A</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===== VARIABLES ===== */
+    :root {
+      --navy:          #1A2847;
+      --navy-2:        #152039;
+      --navy-3:        #0f1a2e;
+      --gold:          #C9A43A;
+      --gold-glow:     rgba(201,164,58,.12);
+      --gold-border:   rgba(201,164,58,.32);
+      --gold-border-hl:rgba(201,164,58,.65);
+      --cream:         #F5EFE0;
+      --cream-dark:    #EDE8DC;
+      --white:         #FFFFFF;
+      --text:          #2C2C2C;
+      --text-muted:    #777777;
+      --od:            #F5EFE0;          /* on-dark text */
+      --od-60:         rgba(245,239,224,.65);
+      --od-35:         rgba(245,239,224,.35);
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy-3);
+      color: var(--od);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== STICKY NAV ===== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy);
+      transition: box-shadow .3s ease;
+    }
+    .nav.scrolled { box-shadow: 0 4px 28px rgba(0,0,0,.4); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .nav-logo {
+      font-size: 20px; font-weight: 900;
+      color: var(--od); letter-spacing: -.03em; flex-shrink: 0;
+    }
+    .nav-logo .g { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--od-60);
+      padding: 7px 14px; border-radius: 8px;
+      transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--od); background: rgba(255,255,255,.06); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--gold); color: var(--navy);
+      font-weight: 800; border-radius: 999px;
+      transition: opacity .15s, transform .2s ease, box-shadow .2s ease;
+      cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn:hover { opacity: .92; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(201,164,58,.35); }
+    .btn-sm  { font-size: 14px; padding: 10px 20px; }
+    .btn-lg  { font-size: clamp(16px,2vw,20px); padding: 18px 44px; box-shadow: 0 8px 32px rgba(201,164,58,.28); }
+
+    /* ===== SECTION BASE ===== */
+    .sec {
+      width: 100%; padding: 100px 32px;
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .sec.vis { opacity: 1; transform: translateY(0); }
+    .sec-in { max-width: 1200px; margin: 0 auto; }
+    .dark { background: var(--navy); color: var(--od); }
+    .light { background: var(--cream); color: var(--text); }
+
+    .kicker {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .light .kicker { color: var(--navy); opacity: .45; }
+    .sec-title {
+      font-size: clamp(34px,4vw,52px); font-weight: 800;
+      letter-spacing: -.035em; line-height: 1.05; margin-bottom: 12px;
+    }
+    .dark .sec-title { color: var(--od); }
+    .light .sec-title { color: var(--navy); }
+    .gold-bar { width: 44px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 48px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      padding: 100px 32px 88px;
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -5%, rgba(201,164,58,.09) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 95% 110%, rgba(15,26,46,.9) 0%, transparent 60%),
+        var(--navy);
+      opacity: 1 !important; transform: none !important;
+    }
+    .hero-in { max-width: 1200px; margin: 0 auto; width: 100%; }
+    .hero-kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px;
+    }
+    .hero-title {
+      font-size: clamp(68px, 9.5vw, 132px); font-weight: 900;
+      letter-spacing: -.05em; line-height: .9;
+      color: var(--od); margin-bottom: 28px;
+    }
+    .hero-title .dot { color: var(--gold); }
+    .hero-sub {
+      font-size: clamp(16px,2vw,22px); font-weight: 400;
+      line-height: 1.55; color: var(--od-60);
+      max-width: 600px; margin-bottom: 56px;
+    }
+    .hero-sub b { color: var(--od); font-weight: 600; }
+
+    /* ROI panel */
+    .roi-panel {
+      display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 12px; align-items: stretch; margin-bottom: 18px;
+    }
+    .roi-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--gold-border);
+      border-radius: 22px; padding: 30px 22px; text-align: center;
+      display: flex; flex-direction: column; justify-content: center; gap: 10px;
+    }
+    .roi-card.hl {
+      background: var(--gold-glow);
+      border-color: var(--gold-border-hl);
+      box-shadow: 0 0 48px rgba(201,164,58,.13);
+    }
+    .roi-num {
+      font-size: clamp(28px,4vw,52px); font-weight: 900;
+      color: var(--gold); letter-spacing: -.03em; line-height: 1;
+    }
+    .roi-desc { font-size: 14px; color: var(--od-60); line-height: 1.4; }
+    .roi-desc b { color: var(--od); font-weight: 600; }
+    .roi-op {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; font-weight: 700; color: var(--od-35);
+    }
+    .roi-foot {
+      font-size: 14px; font-style: italic; color: var(--od-35); margin-bottom: 44px;
+    }
+
+    /* Hook */
+    .hook {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      font-size: clamp(18px,2.5vw,30px); font-weight: 700;
+      color: var(--od); letter-spacing: -.02em; margin-bottom: 48px;
+    }
+    .hook .gd { color: var(--gold); }
+    .hook .dim { color: var(--od-35); font-weight: 400; }
+
+    /* Format row */
+    .fmt-row {
+      display: inline-flex; align-items: stretch;
+      border: 1px solid rgba(245,239,224,.14); border-radius: 16px;
+      overflow: hidden; background: rgba(255,255,255,.03); margin-bottom: 44px;
+      flex-wrap: wrap;
+    }
+    .fmt-cell {
+      padding: 16px 26px; border-right: 1px solid rgba(245,239,224,.09);
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .fmt-cell:last-child { border-right: 0; }
+    .fmt-lbl { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+    .fmt-val { font-size: 15px; font-weight: 600; color: var(--od); }
+    .cta-sub { margin-top: 14px; font-size: 13px; color: var(--od-35); letter-spacing: .04em; }
+    .cta-sub .sp { color: var(--gold); margin: 0 7px; }
+
+    /* ===== ABOUT ===== */
+    .about-name {
+      font-size: clamp(38px,6vw,72px); font-weight: 800;
+      font-style: italic; letter-spacing: -.03em;
+      line-height: 1; color: var(--od); margin-bottom: 6px;
+    }
+    .about-name .dot { color: var(--gold); }
+    .about-role {
+      font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--od-60); margin-bottom: 22px;
+    }
+    .about-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 44px; }
+    .about-socials a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 18px; border: 1px solid var(--gold-border); border-radius: 999px;
+      font-size: 13px; font-weight: 500; color: var(--od);
+      background: rgba(255,255,255,.03); transition: background .15s, border-color .15s;
+    }
+    .about-socials a:hover { background: var(--gold-glow); border-color: var(--gold); }
+
+    .photo-block { display: flex; gap: 56px; align-items: flex-start; }
+    .photo-wrap { flex-shrink: 0; width: 340px; }
+    .photo-wrap img {
+      width: 100%; aspect-ratio: 340/460; object-fit: cover; object-position: 50% 10%;
+      border-radius: 24px; border: 1px solid var(--gold-border);
+      box-shadow: 0 24px 64px rgba(0,0,0,.45);
+    }
+    .text-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .about-accent { font-size: clamp(17px,2vw,22px); font-weight: 700; color: var(--gold); line-height: 1.35; }
+    .about-body { font-size: clamp(15px,1.5vw,18px); line-height: 1.65; color: var(--od-60); }
+    .about-body b { color: var(--od); font-weight: 600; }
+    .wave-box {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(245,239,224,.1);
+      border-radius: 18px; padding: 22px 26px;
+    }
+    .wave-lbl { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .wave-body { font-size: 15px; line-height: 1.65; color: var(--od-60); }
+    .wave-body b { color: var(--od); font-weight: 600; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 44px; }
+    .stat {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(245,239,224,.09);
+      border-radius: 18px; padding: 26px 20px; text-align: center;
+    }
+    .stat-n { font-size: clamp(28px,3vw,44px); font-weight: 900; color: var(--gold); letter-spacing: -.03em; line-height: 1; margin-bottom: 8px; }
+    .stat-l { font-size: 13px; color: var(--od-60); line-height: 1.35; }
+
+    /* ===== AUDIENCE ===== */
+    .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .aud-card {
+      background: var(--white); border-radius: 16px;
+      border-left: 3px solid var(--gold); padding: 24px 26px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    }
+    .aud-n { font-size: 10px; font-weight: 700; letter-spacing: .15em; color: var(--gold); margin-bottom: 6px; }
+    .aud-role { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; letter-spacing: -.01em; }
+    .aud-p { font-size: 14px; line-height: 1.6; color: var(--text-muted); }
+    .aud-outro {
+      grid-column: 1/-1; background: rgba(201,164,58,.07);
+      border: 1px solid rgba(201,164,58,.28); border-radius: 16px;
+      padding: 24px 32px; text-align: center;
+      font-size: clamp(14px,1.8vw,18px); line-height: 1.55; color: var(--text);
+    }
+    .aud-outro b { color: var(--navy); font-weight: 700; }
+
+    /* ===== RESULTS ===== */
+    .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .res-card {
+      background: var(--white); border-radius: 16px;
+      border-left: 3px solid var(--gold); padding: 22px 24px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .res-badge {
+      display: inline-block; background: var(--navy); color: var(--gold);
+      font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px; align-self: flex-start;
+    }
+    .res-task { font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -.01em; }
+    .res-row { display: grid; grid-template-columns: 60px 1fr; gap: 10px; align-items: baseline; }
+    .res-lbl { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); }
+    .res-lbl.now { color: var(--gold); }
+    .res-v { font-size: 14px; line-height: 1.4; color: var(--text-muted); }
+    .res-v.now { font-weight: 600; color: var(--text); }
+    .res-foot {
+      text-align: center; font-size: 15px; font-style: italic; color: var(--text-muted);
+      margin-top: 10px; padding-top: 32px; border-top: 1px solid var(--cream-dark);
+    }
+
+    /* ===== PROGRAM ===== */
+    .prog-blocks { display: flex; flex-direction: column; gap: 32px; margin-bottom: 48px; }
+    .prog-blk-lbl {
+      font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); padding-bottom: 10px; border-bottom: 1px solid rgba(201,164,58,.18);
+      margin-bottom: 10px;
+    }
+    .prog-items { display: flex; flex-direction: column; gap: 8px; }
+    .prog-item {
+      display: grid; grid-template-columns: 38px 1fr auto;
+      gap: 16px; align-items: center;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(245,239,224,.07);
+      border-radius: 14px; padding: 16px 20px;
+      transition: background .15s, border-color .15s;
+    }
+    .prog-item:hover { background: rgba(201,164,58,.06); border-color: rgba(201,164,58,.2); }
+    .prog-n { font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: .08em; }
+    .prog-name { font-size: 16px; font-weight: 700; color: var(--od); letter-spacing: -.01em; margin-bottom: 3px; }
+    .prog-desc { font-size: 13px; color: var(--od-60); line-height: 1.4; }
+    .prog-time {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--od-35);
+      white-space: nowrap; background: rgba(255,255,255,.05);
+      padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.07);
+    }
+
+    /* Info ticket */
+    .info-ticket {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      border: 1px solid var(--gold-border); border-radius: 18px;
+      overflow: hidden; margin-bottom: 40px;
+    }
+    .t-cell { padding: 20px 24px; border-right: 1px solid rgba(201,164,58,.14); }
+    .t-cell:last-child { border-right: 0; }
+    .t-lbl { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .t-val { font-size: 15px; font-weight: 600; color: var(--od); line-height: 1.3; }
+
+    /* Price CTA */
+    .price-cta {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;
+      background: var(--gold-glow); border: 1px solid var(--gold-border);
+      border-radius: 24px; padding: 44px 52px;
+    }
+    .price-lbl { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .price-main { font-size: clamp(36px,4vw,56px); font-weight: 900; color: var(--gold); letter-spacing: -.04em; line-height: 1; margin-bottom: 10px; }
+    .price-desc { font-size: 14px; color: var(--od-60); line-height: 1.5; }
+    .price-desc .sp { color: var(--gold); margin: 0 7px; }
+    .price-right { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .price-note { font-size: 13px; color: var(--od-35); line-height: 1.5; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--navy-3); border-top: 1px solid rgba(245,239,224,.07);
+      padding: 72px 32px 36px;
+    }
+    .ft-in { max-width: 1200px; margin: 0 auto; }
+    .ft-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 52px; }
+    .ft-logo { font-size: 22px; font-weight: 900; color: var(--od); letter-spacing: -.03em; margin-bottom: 8px; }
+    .ft-logo .g { color: var(--gold); }
+    .ft-tag { font-size: 14px; font-style: italic; color: var(--gold); margin-bottom: 10px; }
+    .ft-desc { font-size: 13px; line-height: 1.65; color: var(--od-35); }
+    .ft-col h4 { font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .ft-col li a { font-size: 14px; color: var(--od-35); transition: color .15s; }
+    .ft-col li a:hover { color: var(--od); }
+    .ft-bottom {
+      padding-top: 24px; border-top: 1px solid rgba(245,239,224,.06);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+      font-size: 12px; letter-spacing: .06em; color: var(--od-35);
+    }
+
+    /* Divider */
+    .div { text-align: center; padding: 6px 0; font-size: 12px; letter-spacing: .18em; color: var(--od-35); background: var(--navy); }
+    .div.lt { background: var(--cream); color: rgba(44,44,44,.25); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .ft-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .info-ticket { grid-template-columns: 1fr 1fr; }
+      .t-cell { border-bottom: 1px solid rgba(201,164,58,.12); }
+      .t-cell:nth-last-child(-n+2) { border-bottom: none; }
+    }
+    @media (max-width: 760px) {
+      .sec { padding: 72px 20px; }
+      .hero { padding: 88px 20px 72px; }
+      .roi-panel { grid-template-columns: 1fr; gap: 10px; }
+      .roi-op { display: none; }
+      .photo-block { flex-direction: column; gap: 32px; align-items: center; }
+      .photo-wrap { width: 100%; max-width: 320px; }
+      .price-cta { grid-template-columns: 1fr; padding: 32px 28px; }
+      .price-right { align-items: stretch; }
+      .btn-lg { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 640px) {
+      .sec { padding: 60px 16px; }
+      .hero { padding: 80px 16px 60px; }
+      .aud-grid { grid-template-columns: 1fr; }
+      .res-grid { grid-template-columns: 1fr; }
+      .prog-item { grid-template-columns: 32px 1fr; }
+      .prog-time { display: none; }
+      .info-ticket { grid-template-columns: 1fr; }
+      .t-cell { border-right: 0; border-bottom: 1px solid rgba(201,164,58,.12); }
+      .t-cell:last-child { border-bottom: 0; }
+      .ft-grid { grid-template-columns: 1fr; gap: 28px; }
+      .fmt-row { flex-direction: column; }
+      .fmt-cell { border-right: 0; border-bottom: 1px solid rgba(245,239,224,.08); }
+      .fmt-cell:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 420px) {
+      .hero-title { font-size: clamp(52px,14vw,80px); }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .nav-inner { padding: 0 16px; }
+      .btn-sm { font-size: 13px; padding: 9px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">AG<span class="g">O</span>RTEX</a>
+    <ul class="nav-links">
+      <li><a href="#hero">Главная</a></li>
+      <li><a href="#about">Кто ведёт</a></li>
+      <li><a href="#audience">Для кого</a></li>
+      <li><a href="#results">Результаты</a></li>
+      <li><a href="#program">Программа</a></li>
+    </ul>
+    <a href="https://t.me/mrbrezgin" target="_blank" rel="noopener" class="btn btn-sm">Получить доступ →</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero dark" id="hero">
+  <div class="hero-in">
+    <div class="hero-kicker">Воркшоп по AI для бизнеса · Андрей Брезгин · Agortex</div>
+
+    <h1 class="hero-title">
+      Автоматизируй<br>бизнес<span class="dot">.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Готовые AI-инструменты, которые <b>сокращают расходы</b> и убирают рутину.<br>
+      <b>Практика, а не теория.</b>
+    </p>
+
+    <div class="roi-panel">
+      <div class="roi-card">
+        <div class="roi-num">$200/мес</div>
+        <div class="roi-desc">стоимость <b>AI-подписки</b> на 4 инструмента</div>
+      </div>
+      <div class="roi-op">×</div>
+      <div class="roi-card hl">
+        <div class="roi-num">3–5 человек</div>
+        <div class="roi-desc"><b>рутину скольких специалистов</b> закрывают эти инструменты</div>
+      </div>
+      <div class="roi-op">=</div>
+      <div class="roi-card">
+        <div class="roi-num">$3 000+/мес</div>
+        <div class="roi-desc"><b>экономия на персонале</b> после внедрения</div>
+      </div>
+    </div>
+    <p class="roi-foot">Воркшоп снят на реальных кейсах. Каждый инструмент — из действующей практики.</p>
+
+    <div class="hook">
+      <span class="gd">1 владелец</span>
+      <span class="dim">+</span>
+      <span>AI</span>
+      <span class="dim">=</span>
+      <span>система, которая работает без тебя</span>
+    </div>
+
+    <div class="fmt-row">
+      <div class="fmt-cell">
+        <div class="fmt-lbl">Доступ</div>
+        <div class="fmt-val">сразу после регистрации</div>
+      </div>
+      <div class="fmt-cell">
+        <div class="fmt-lbl">Формат</div>
+        <div class="fmt-val">видеозапись воркшопа</div>
+      </div>
+      <div class="fmt-cell">
+        <div class="fmt-lbl">Длительность</div>
+        <div class="fmt-val">~3 часа</div>
+      </div>
+      <div class="fmt-cell">
+        <div class="fmt-lbl">Просмотры</div>
+        <div class="fmt-val">без ограничений</div>
+      </div>
+    </div>
+
+    <a href="https://t.me/mrbrezgin" target="_blank" rel="noopener" class="btn btn-lg">
+      Получить доступ →
+    </a>
+    <p class="cta-sub">
+      7 модулей<span class="sp">·</span>практика руками<span class="sp">·</span>инструменты, которые работают сейчас
+    </p>
+  </div>
+</section>
+
+<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
+
+<!-- ===== ABOUT ===== -->
+<section class="sec dark" id="about">
+  <div class="sec-in">
+    <div class="kicker">Кто ведёт</div>
+    <h2 class="about-name"><em>Андрей Брезгин<span class="dot">.</span></em></h2>
+    <p class="about-role">Основатель · Agortex</p>
+
+    <div class="about-socials">
+      <a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.281c-.144.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.296-.605.296l.213-3.054 5.56-5.022c.243-.213-.054-.333-.373-.12L6.985 13.63l-2.962-.924c-.643-.205-.657-.643.136-.953l11.57-4.461c.537-.194 1.007.131.833.956z"/>
+        </svg>
+        Telegram
+      </a>
+    </div>
+
+    <div class="photo-block">
+      <div class="photo-wrap">
+        <img src="photo.jpg" alt="Андрей Брезгин, основатель Agortex, воркшоп по AI для бизнеса">
+      </div>
+      <div class="text-col">
+        <p class="about-accent">Я не преподаю AI. Я на нём работаю.</p>
+        <p class="about-body">
+          12 лет в маркетинге и управлении продажами. Развивал коммерческие системы
+          для <b>крупного регионального бизнеса</b> и премиальных брендов. Знаю, где
+          теряется бюджет и почему автоматизация <b>не взлетает с первого раза.</b>
+        </p>
+        <p class="about-body">
+          Создал Agortex, чтобы владельцы бизнеса получали рабочие AI-связки —
+          без воды, без слайдов на 100 страниц, <b>без домашних заданий.</b>
+          На воркшопе показываю только то, что использую сам прямо сейчас.
+        </p>
+        <div class="wave-box">
+          <div class="wave-lbl">Почему сейчас</div>
+          <p class="wave-body">
+            В 90-х интернет дал преимущество тем, кто вошёл раньше — на нём выросли Amazon, Google, Meta.
+            Сейчас <b>то же самое происходит с AI.</b> Разрыв между теми, кто внедрил,
+            и теми, кто ждёт — растёт каждый месяц.
+            Выигрывает не размер компании, а <b>скорость внедрения.</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-n">12+</div><div class="stat-l">лет в маркетинге и продажах</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">ключевых AI-инструмента в воркшопе</div></div>
+      <div class="stat"><div class="stat-n">5×</div><div class="stat-l">быстрее решаются бизнес-задачи</div></div>
+      <div class="stat"><div class="stat-n">$200</div><div class="stat-l">стоимость полной AI-команды в мес</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
+
+<!-- ===== AUDIENCE ===== -->
+<section class="sec light" id="audience">
+  <div class="sec-in">
+    <div class="kicker">Для кого · Аудитория</div>
+    <h2 class="sec-title">Узнай себя.</h2>
+    <div class="gold-bar"></div>
+    <div class="aud-grid">
+      <div class="aud-card">
+        <div class="aud-n">01</div>
+        <div class="aud-role">Владелец бизнеса</div>
+        <p class="aud-p">База клиентов есть, до касаний руки не доходят. AI ведёт фоллоу-апы, поздравления и повторные продажи — без CRM-подрядчика.</p>
+      </div>
+      <div class="aud-card">
+        <div class="aud-n">02</div>
+        <div class="aud-role">Руководитель B2B-продаж</div>
+        <p class="aud-p">200 контактов в работе, половина висит без движения. AI фильтрует ответы — горячие лиды уходят в Telegram автоматически.</p>
+      </div>
+      <div class="aud-card">
+        <div class="aud-n">03</div>
+        <div class="aud-role">Предприниматель в ОАЭ / за рубежом</div>
+        <p class="aud-p">Нужны клиенты и система без найма локальной команды. AI выстраивает маркетинг — управляешь из любой точки мира.</p>
+      </div>
+      <div class="aud-card">
+        <div class="aud-n">04</div>
+        <div class="aud-role">Соло-предприниматель</div>
+        <p class="aud-p">Сам себе бизнес. Отчёты, переписки, контент — делегируй AI то, что не приносит деньги напрямую.</p>
+      </div>
+      <div class="aud-card">
+        <div class="aud-n">05</div>
+        <div class="aud-role">Эксперт / коуч / юрист</div>
+        <p class="aud-p">Работаешь 1-на-1. Собственный бот-квиз, авто-разборы и лид-магнит — без подрядчика и без подписок на чужие сервисы.</p>
+      </div>
+      <div class="aud-card">
+        <div class="aud-n">06</div>
+        <div class="aud-role">Маркетолог / SMM</div>
+        <p class="aud-p">Лендинг, бот-воронка, автоответы в DM — собираешь сам, продаёшь клиенту как готовое решение.</p>
+      </div>
+      <div class="aud-outro">
+        <b>Программировать не нужно.</b> Нужен ноутбук, интернет и одна задача, которую хочешь закрыть AI-инструментом.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="div lt">↓ &nbsp; scroll &nbsp; ↓</div>
+
+<!-- ===== RESULTS ===== -->
+<section class="sec light" id="results">
+  <div class="sec-in">
+    <div class="kicker">Было · Стало</div>
+    <h2 class="sec-title">Что меняется после воркшопа</h2>
+    <div class="gold-bar"></div>
+    <div class="res-grid">
+
+      <div class="res-card">
+        <span class="res-badge">Контент</span>
+        <div class="res-task">Пост для 5 платформ</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">SMM-специалист, 2 часа на адаптацию под каждую платформу</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">5 минут — LinkedIn · Instagram · Telegram · X</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Продажи</span>
+        <div class="res-task">Резюме звонка</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">менеджер тратит 10–15 минут на каждую сделку</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">30 секунд — авто-резюме сразу после звонка</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Продажи</span>
+        <div class="res-task">Квалификация заявок</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">ассистент весь день на переписке и звонках</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">AI квалифицирует, горячие лиды — сразу к тебе</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Маркетинг</span>
+        <div class="res-task">Анализ конкурентов</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">подрядчик, 2 недели, отчёт сразу устарел</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">5 минут — структура, цены, слабые места</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Маркетинг</span>
+        <div class="res-task">Парсер чатов и каналов</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">программист 1–2 недели + отдельная подписка</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">1 час — свой парсер под любую задачу</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Сервис</span>
+        <div class="res-task">Авто-ответ в мессенджерах</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">оператор $800–$1 500 в месяц</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">−60% нагрузки — типовые вопросы закрывает AI</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Продукт</span>
+        <div class="res-task">Telegram-бот под задачу</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">3 специалиста, 5 дней, правки через посредников</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">1 день — любая логика, меняешь сам</span></div>
+      </div>
+
+      <div class="res-card">
+        <span class="res-badge">Финансы</span>
+        <div class="res-task">Чеки и инвойсы из фото</div>
+        <div class="res-row"><span class="res-lbl">Раньше</span><span class="res-v">бухгалтер 3 часа в неделю на ввод данных</span></div>
+        <div class="res-row"><span class="res-lbl now">Сейчас</span><span class="res-v now">0 минут — фото в WhatsApp → сразу в учёт</span></div>
+      </div>
+
+    </div>
+    <p class="res-foot">AI-подписка за $200/мес заменяет 3–5 человек на рутине · экономия от $3 000/мес чистой прибыли</p>
+  </div>
+</section>
+
+<div class="div">↓ &nbsp; scroll &nbsp; ↓</div>
+
+<!-- ===== PROGRAM ===== -->
+<section class="sec dark" id="program">
+  <div class="sec-in">
+    <div class="kicker">Программа воркшопа</div>
+    <h2 class="sec-title">7 модулей. Практика руками.</h2>
+    <div class="gold-bar"></div>
+
+    <div class="prog-blocks">
+      <div>
+        <div class="prog-blk-lbl">Блок I · Настройка</div>
+        <div class="prog-items">
+          <div class="prog-item">
+            <div class="prog-n">01</div>
+            <div>
+              <div class="prog-name">Среда за 30 минут</div>
+              <div class="prog-desc">Установка, 5 ключевых настроек, голос, защита данных — с нуля до рабочего состояния</div>
+            </div>
+            <div class="prog-time">~20 мин</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n">02</div>
+            <div>
+              <div class="prog-name">База знаний бизнеса</div>
+              <div class="prog-desc">CLAUDE.md, plans/, .business/ — собираем «второй мозг» под вашу компанию</div>
+            </div>
+            <div class="prog-time">~25 мин</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="prog-blk-lbl">Блок II · AI-команда</div>
+        <div class="prog-items">
+          <div class="prog-item">
+            <div class="prog-n">03</div>
+            <div>
+              <div class="prog-name">Скиллы: нанятая команда</div>
+              <div class="prog-desc">Методолог, дизайнер, юрист, PDF-аналитик — подключаем нужного специалиста за один клик</div>
+            </div>
+            <div class="prog-time">~20 мин</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n">04</div>
+            <div>
+              <div class="prog-name">Голос и телефон</div>
+              <div class="prog-desc">Whisper + Telegram: голосовые сообщения превращаются в структурированные задачи</div>
+            </div>
+            <div class="prog-time">~20 мин</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n">05</div>
+            <div>
+              <div class="prog-name">Параллельные агенты</div>
+              <div class="prog-desc">Несколько задач одновременно — как запускать субагентов и не терять контекст</div>
+            </div>
+            <div class="prog-time">~20 мин</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="prog-blk-lbl">Блок III · Метод и практика</div>
+        <div class="prog-items">
+          <div class="prog-item">
+            <div class="prog-n">06</div>
+            <div>
+              <div class="prog-name">7 правил работы с AI</div>
+              <div class="prog-desc">Как ставить задачи, чтобы AI не переспрашивал — методология + готовый конспект за 10 минут</div>
+            </div>
+            <div class="prog-time">~25 мин</div>
+          </div>
+          <div class="prog-item">
+            <div class="prog-n">07</div>
+            <div>
+              <div class="prog-name">Live Demo: AI в браузере</div>
+              <div class="prog-desc">LinkedIn, CRM, аналитика — AI кликает, читает и заполняет за тебя в реальном времени</div>
+            </div>
+            <div class="prog-time">~35 мин</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-ticket">
+      <div class="t-cell">
+        <div class="t-lbl">Формат</div>
+        <div class="t-val">Видеозапись воркшопа</div>
+      </div>
+      <div class="t-cell">
+        <div class="t-lbl">Доступ</div>
+        <div class="t-val">Сразу после регистрации</div>
+      </div>
+      <div class="t-cell">
+        <div class="t-lbl">Материалы</div>
+        <div class="t-val">Шпаргалки и шаблоны в комплекте</div>
+      </div>
+      <div class="t-cell">
+        <div class="t-lbl">Что взять</div>
+        <div class="t-val">Ноутбук + одна задача для бизнеса</div>
+      </div>
+    </div>
+
+    <div class="price-cta">
+      <div>
+        <div class="price-lbl">Стоимость</div>
+        <div class="price-main">Бесплатно</div>
+        <p class="price-desc">3 часа практики<span class="sp">·</span>7 модулей<span class="sp">·</span>навсегда</p>
+      </div>
+      <div class="price-right">
+        <a href="https://t.me/mrbrezgin" target="_blank" rel="noopener" class="btn btn-lg">Получить доступ →</a>
+        <p class="price-note">Смотри в своём темпе. Пересматривай сколько нужно.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="ft-in">
+    <div class="ft-grid">
+      <div>
+        <div class="ft-logo">AG<span class="g">O</span>RTEX</div>
+        <div class="ft-tag">Инфраструктура роста</div>
+        <p class="ft-desc">Консалтинг для бизнеса: AI-автоматизация, системный маркетинг, открытие компаний в ОАЭ, аудит и стратегия.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Воркшоп</h4>
+        <ul>
+          <li><a href="#hero">Главная</a></li>
+          <li><a href="#about">Кто ведёт</a></li>
+          <li><a href="#audience">Для кого</a></li>
+          <li><a href="#results">Результаты</a></li>
+          <li><a href="#program">Программа</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Услуги Agortex</h4>
+        <ul>
+          <li><a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">Внедрение ИИ</a></li>
+          <li><a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">Маркетинг</a></li>
+          <li><a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">Бизнес в ОАЭ</a></li>
+          <li><a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">Аудит и стратегия</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="https://t.me/mrbrezgin" target="_blank" rel="noopener">Telegram @mrbrezgin</a></li>
+          <li><a href="#">Dubai, UAE</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 Agortex · Все права защищены</span>
+      <span>Андрей Брезгин · Основатель</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav shadow on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Fade-in sections on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.sec').forEach(s => io.observe(s));
+</script>
+</body>
+</html>
